@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Sobre Nós - TechServices{% endblock %}
+
+{% block content %}
+<h1>Sobre a TechServices</h1>
+<div class="row mt-4">
+    <div class="col-md-8">
+        <p>A TechServices é uma empresa especializada em desenvolvimento de software e consultoria em TI, focada em fornecer soluções tecnológicas de alta qualidade para empresas de todos os tamanhos.</p>
+        
+        <p>Nossa missão é ajudar as empresas a aproveitarem o poder da tecnologia para impulsionar seus negócios, melhorar a eficiência operacional e alcançar seus objetivos estratégicos.</p>
+        
+        <h2 class="mt-4">Nossa Equipe</h2>
+        <p>Contamos com uma equipe de profissionais altamente qualificados, com vasta experiência no desenvolvimento de soluções tecnológicas inovadoras e eficientes.</p>
+        
+        <h2 class="mt-4">Nossa Abordagem</h2>
+        <p>Trabalhamos em estreita colaboração com nossos clientes para entender suas necessidades específicas e desenvolver soluções personalizadas que atendam às suas expectativas.</p>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Entre em Contato</h3>
+                <p>Estamos à disposição para esclarecer dúvidas e fornecer mais informações sobre nossos serviços.</p>
+                <a href="{{ url_for('contact') }}" class="btn btn-primary">Contato</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

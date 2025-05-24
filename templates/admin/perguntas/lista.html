@@ -1,0 +1,79 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Perguntas</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Perguntas</li>
+    </ol>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-question-circle me-1"></i>
+            Lista de Perguntas
+            <a href="{{ url_for('admin_pergunta_nova') }}" class="btn btn-primary btn-sm float-end">
+                <i class="fas fa-plus"></i> Nova Pergunta
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Pergunta</th>
+                            <th>Tipo</th>
+                            <th>Aula</th>
+                            <th>Módulo</th>
+                            <th>Curso</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for question in questions %}
+                        <tr>
+                            <td>{{ question.question_text|truncate(70) }}</td>
+                            <td>
+                                <span class="badge bg-{{ 'primary' if question.question_type == 'multiple_choice' else 'success' if question.question_type == 'true_false' else 'info' }}">
+                                    {{ question.question_type|replace('_', ' ')|title }}
+                                </span>
+                            </td>
+                            <td>{{ question.lesson.title|truncate(20) }}</td>
+                            <td>{{ question.lesson.module.title|truncate(15) }}</td>
+                            <td>{{ question.lesson.module.course.title|truncate(15) }}</td>
+                            <td class="text-nowrap">
+                                <a href="{{ url_for('admin_pergunta_editar', id=question.id) }}" 
+                                   class="btn btn-sm btn-primary" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-danger" title="Excluir"
+                                   onclick="confirmDelete('{{ url_for('admin_pergunta_excluir', id=question.id) }}', 'Tem certeza que deseja excluir esta pergunta?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">Nenhuma pergunta cadastrada.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'admin/_confirm_modal.html' %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmDelete(url, message) {
+    const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+    document.getElementById('confirmMessage').textContent = message || 'Tem certeza que deseja excluir esta pergunta?';
+    document.getElementById('confirmButton').href = url;
+    confirmModal.show();
+}
+</script>
+{% endblock %}

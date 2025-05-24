@@ -1,0 +1,242 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} - Painel Administrativo{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <h1 class="mt-4">{{ title }}</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('admin_cursos') }}">Cursos</a></li>
+        <li class="breadcrumb-item active">{{ title }}</li>
+    </ol>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-{{ 'edit' if form.id.data else 'plus' }} me-1"></i>
+            {{ 'Editar' if form.id.data else 'Adicionar' }} Curso
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                {{ form.hidden_tag() }}
+                
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <div class="form-group mb-3">
+                            {{ form.title.label(class="form-label") }}
+                            {{ form.title(class="form-control" + (' is-invalid' if form.title.errors else ''), placeholder="Digite o título do curso") }}
+                            {% if form.title.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.title.errors[0] }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.description.label(class="form-label") }}
+                            {{ form.description(class="form-control summernote" + (' is-invalid' if form.description.errors else ''), rows=5, placeholder="Digite a descrição do curso") | safe }}
+                            {% if form.description.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.description.errors[0] }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                Imagem de Capa
+                            </div>
+                            <div class="card-body text-center">
+                                {% if form.image_url.data %}
+                                <img id="imagePreview" src="{{ form.image_url.data }}" alt="Preview" class="img-fluid mb-3" style="max-height: 200px;">
+                                {% else %}
+                                <img id="imagePreview" src="{{ url_for('static', filename='img/placeholder-course.jpg') }}" alt="Preview" class="img-fluid mb-3" style="max-height: 200px;">
+                                {% endif %}
+                                
+                                <div class="form-group">
+                                    <label for="image_upload" class="btn btn-outline-primary w-100">
+                                        <i class="fas fa-upload me-2"></i>Escolher Imagem
+                                    </label>
+                                    <input type="file" id="image_upload" name="image" class="d-none" accept="image/*">
+                                    {{ form.image_url(class="d-none") }}
+                                    <div class="form-text">Tamanho recomendado: 800x450px</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                Configurações
+                            </div>
+                            <div class="card-body">
+                                <div class="form-check form-switch mb-3">
+                                    {{ form.is_active(class="form-check-input", id="is_active") }}
+                                    <label class="form-check-label" for="is_active">Curso Ativo</label>
+                                </div>
+                                
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-2"></i>Salvar Alterações
+                                    </button>
+                                    <a href="{{ url_for('admin_cursos') }}" class="btn btn-outline-secondary">
+                                        <i class="fas fa-arrow-left me-2"></i>Cancelar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span>Módulos</span>
+                                <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addModuleModal">
+                                    <i class="fas fa-plus me-1"></i> Adicionar Módulo
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                {% if form.id.data and curso.modules %}
+                                    <div class="list-group">
+                                        {% for modulo in curso.modules|sort(attribute='order') %}
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-1">{{ modulo.title }}</h6>
+                                                    <p class="mb-1 text-muted small">{{ modulo.description|truncate(100) if modulo.description else 'Sem descrição' }}</p>
+                                                    <small class="text-muted">{{ modulo.lessons|length }} lições</small>
+                                                </div>
+                                                <div class="btn-group">
+                                                    <a href="#" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-sm btn-outline-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-info mb-0">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        Salve o curso para começar a adicionar módulos.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Adicionar Módulo -->
+<div class="modal fade" id="addModuleModal" tabindex="-1" aria-labelledby="addModuleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModuleModalLabel">Adicionar Módulo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form id="moduleForm" action="#" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="module_title" class="form-label">Título do Módulo</label>
+                        <input type="text" class="form-control" id="module_title" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="module_description" class="form-label">Descrição (Opcional)</label>
+                        <textarea class="form-control" id="module_description" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="module_order" class="form-label">Ordem</label>
+                        <input type="number" class="form-control" id="module_order" name="order" value="1" min="1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Módulo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Preview da imagem
+    document.getElementById('image_upload').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imagePreview').src = e.target.result;
+                // Se você estiver usando um campo oculto para a URL da imagem
+                document.getElementById('{{ form.image_url.id }}').value = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Validação do formulário
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+    
+    // Inicializa o editor de texto rico
+    $(document).ready(function() {
+        $('.summernote').summernote({
+            height: 200,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']],
+            ],
+            callbacks: {
+                onImageUpload: function(files) {
+                    // Aqui você pode adicionar o código para fazer upload da imagem
+                    // e retornar a URL da imagem para ser inserida no editor
+                    console.log('Upload de imagem:', files);
+                }
+            }
+        });
+    });
+    
+    // Envio do formulário de módulo via AJAX
+    document.getElementById('moduleForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Aqui você pode adicionar o código para enviar o formulário via AJAX
+        // e adicionar o novo módulo à lista sem recarregar a página
+        console.log('Formulário de módulo enviado');
+        
+        // Fechar o modal após o envio
+        var modal = bootstrap.Modal.getInstance(document.getElementById('addModuleModal'));
+        modal.hide();
+    });
+</script>
+{% endblock %}

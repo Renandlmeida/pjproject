@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Nossos Serviços - TechServices{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Nossos Serviços</h1>
+
+<div class="row">
+    {% for service in services %}
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h3 class="card-title">{{ service.title }}</h3>
+                <p class="card-text">{{ service.description }}</p>
+                <p class="card-text"><strong>Preço:</strong> {{ service.price }}</p>
+                <a href="#" class="btn btn-primary">Solicitar Orçamento</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

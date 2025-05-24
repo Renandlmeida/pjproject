@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Cursos de Machine Learning - Aprenda IA e Ciência de Dados{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Cabeçalho -->
+    <div class="row mb-5 text-center">
+        <div class="col-12">
+            <div class="animate__animated animate__fadeInDown">
+                <i class="fas fa-robot text-danger display-1 mb-3"></i>
+                <h1 class="display-4 fw-bold">Machine Learning</h1>
+                <p class="lead">Domine os algoritmos de IA e ciência de dados na prática</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cursos em Destaque -->
+    <div class="row g-4">
+        <!-- Curso 1 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" class="card-img-top" alt="Introdução ao ML" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge bg-success mb-2">Iniciante</span>
+                    <h5 class="card-title">Introdução ao Machine Learning</h5>
+                    <p class="card-text">Fundamentos de ML e ciência de dados com Python.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Python para Data Science</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Pré-processamento de dados</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Algoritmos supervisionados</li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a href="#" class="btn btn-danger w-100">Começar Agora</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Curso 2 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" class="card-img-top" alt="Deep Learning" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge bg-warning text-dark mb-2">Avançado</span>
+                    <h5 class="card-title">Deep Learning Avançado</h5>
+                    <p class="card-text">Redes neurais profundas e visão computacional.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Redes Neurais Convolucionais</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Processamento de Imagens</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Transfer Learning</li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a href="#" class="btn btn-danger w-100">Começar Agora</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Destaque -->
+        <div class="col-md-12 col-lg-4">
+            <div class="card h-100 border-0 bg-light animate__animated animate__fadeInRight" style="animation-delay: 0.6s">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <h3 class="h4 mb-4">Por que aprender Machine Learning?</h3>
+                    <div class="d-flex mb-3">
+                        <div class="me-3 text-danger">
+                            <i class="fas fa-brain fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5 class="h6 mb-1">Mercado em Alta</h5>
+                            <p class="small text-muted mb-0">Uma das áreas mais bem pagas de TI</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="me-3 text-danger">
+                            <i class="fas fa-project-diagram fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5 class="h6 mb-1">Aplicações Ilimitadas</h5>
+                            <p class="small text-muted mb-0">Saúde, finanças, varejo e muito mais</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="me-3 text-danger">
+                            <i class="fas fa-chart-line fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5 class="h6 mb-1">Crescimento Contínuo</h5>
+                            <p class="small text-muted mb-0">Demanda em constante expansão</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<!-- Mesmo script de animação da página de Android -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const animateOnScroll = function() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (elementPosition < screenPosition) {
+                    element.classList.add('animate__animated', 'animate__fadeInUp');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        animateOnScroll();
+    });
+</script>
+{% endblock %}

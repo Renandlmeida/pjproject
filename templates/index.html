@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Akoni Software House - Serviços de Programação para Empresas{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h1 class="display-4">Soluções Tecnológicas para sua Empresa</h1>
+        <p class="lead">A Akoni Software House oferece serviços de desenvolvimento de software, web e mobile para impulsionar seu negócio.</p>
+        <div class="mt-4">
+            <a href="{{ url_for('services') }}" class="btn btn-primary btn-lg">Nossos Serviços</a>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg ms-2">Cadastre sua Empresa</a>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3 class="card-title">Desenvolvimento Web</h3>
+                <p class="card-text">Sites modernos e responsivos, aplicações web personalizadas e e-commerce.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3 class="card-title">Aplicativos Mobile</h3>
+                <p class="card-text">Desenvolvimento de aplicativos nativos e híbridos para iOS e Android.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3 class="card-title">Consultoria em TI</h3>
+                <p class="card-text">Assessoria especializada para implementação de soluções tecnológicas.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Seção de Aprendizado -->
+<div class="row mt-5 py-5 learn-section">
+    <div class="col-md-12 text-center">
+        <h2 class="mb-4">Quer aprender programação? Venha com a gente!</h2>
+        <p class="lead mb-5">Na Akoni, transformamos iniciantes em programadores profissionais</p>
+        
+        <div class="row justify-content-center g-4">
+            <div class="col-6 col-md-3 col-lg-2">
+                <div class="feature-box h-100">
+                    <i class="fas fa-laptop-code"></i>
+                    <h5>Aulas Práticas</h5>
+                    <p>Aprenda fazendo projetos reais</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2">
+                <div class="feature-box h-100">
+                    <i class="fas fa-users"></i>
+                    <h5>Mentoria Individual</h5>
+                    <p>Suporte personalizado</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2">
+                <div class="feature-box h-100">
+                    <i class="fas fa-rocket"></i>
+                    <h5>Método Ágil</h5>
+                    <p>Aprenda no seu ritmo</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2">
+                <div class="feature-box h-100">
+                    <i class="fas fa-certificate"></i>
+                    <h5>Certificação</h5>
+                    <p>Reconhecimento no mercado</p>
+                </div>
+            </div>
+        </div>
+        
+        <a href="#" class="btn btn-outline-primary btn-lg mt-3">Saiba Mais</a>
+        
+        <div class="mt-5">
+            <h4 class="mb-4">Qual área você tem interesse?</h4>
+            <div class="row justify-content-center">
+                <div class="col-md-3 col-6 mb-3">
+                    <a href="{{ url_for('cursos') }}" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-th-large me-2"></i> Ver Todos os Cursos
+                    </a>
+                </div>
+                <div class="col-md-3 col-6 mb-3">
+                    <a href="{{ url_for('curso_especifico', curso='android') }}" class="btn btn-outline-success w-100 animate__animated" 
+                       onmouseover="this.classList.add('animate__pulse')" 
+                       onmouseout="this.classList.remove('animate__pulse')">
+                        <i class="fab fa-android me-2"></i> Android
+                    </a>
+                </div>
+                <div class="col-md-3 col-6">
+                    <a href="{{ url_for('curso_especifico', curso='machine-learning') }}" class="btn btn-outline-danger w-100 animate__animated"
+                       onmouseover="this.classList.add('animate__pulse')" 
+                       onmouseout="this.classList.remove('animate__pulse')">
+                        <i class="fas fa-robot me-2"></i> Machine Learning
+                    </a>
+                </div>
+                <div class="col-md-3 col-6">
+                    <a href="{{ url_for('curso_especifico', curso='python') }}" class="btn btn-outline-primary w-100 animate__animated"
+                       onmouseover="this.classList.add('animate__pulse')" 
+                       onmouseout="this.classList.remove('animate__pulse')">
+                        <i class="fab fa-python me-2"></i> Python
+                    </a>
+                </div>
+                <div class="col-md-3 col-6 mt-3">
+                    <a href="{{ url_for('curso_especifico', curso='java') }}" class="btn btn-outline-danger w-100 animate__animated"
+                       onmouseover="this.classList.add('animate__pulse')" 
+                       onmouseout="this.classList.remove('animate__pulse')">
+                        <i class="fab fa-java me-2"></i> Java
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .bg-purple {
+        background-color: #6f42c1;
+    }
+    .text-purple {
+        color: #6f42c1;
+    }
+    .icon-box {
+        transition: transform 0.3s ease;
+    }
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+    }
+    .card:hover .icon-box {
+        transform: scale(1.1);
+    }
+</style>
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/cursos.js') }}"></script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,262 @@
+{% extends "cursos/base.html" %}
+
+{% block title %}Cursos Disponíveis - Plataforma de Aprendizado{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Início</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Cursos</li>
+                </ol>
+            </nav>
+            <h1 class="display-5 fw-bold mb-4">Cursos Disponíveis</h1>
+            <p class="lead">Escolha entre nossa seleção de cursos e comece sua jornada de aprendizado hoje mesmo.</p>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" class="form-control" id="searchCourse" placeholder="Buscar cursos...">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex justify-content-md-end">
+                <div class="dropdown me-2">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-filter me-2"></i>Filtrar por
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                        <li><a class="dropdown-item active" href="#" data-filter="all">Todos os cursos</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" data-filter="iniciante">Iniciante</a></li>
+                        <li><a class="dropdown-item" href="#" data-filter="intermediario">Intermediário</a></li>
+                        <li><a class="dropdown-item" href="#" data-filter="avancado">Avançado</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-sort-amount-down me-2"></i>Ordenar por
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                        <li><a class="dropdown-item active" href="#" data-sort="recent">Mais recentes</a></li>
+                        <li><a class="dropdown-item" href="#" data-sort="popular">Mais populares</a></li>
+                        <li><a class="dropdown-item" href="#" data-sort="rating">Melhor avaliados</a></li>
+                        <li><a class="dropdown-item" href="#" data-sort="name">Ordem alfabética</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row g-4" id="coursesContainer">
+        {% for curso in cursos %}
+        <div class="col-lg-4 col-md-6" data-level="{{ curso.nivel|lower }}" data-name="{{ curso.titulo|lower }}">
+            <div class="card h-100 course-card">
+                {% if curso.imagem_url %}
+                <img src="{{ curso.imagem_url }}" class="card-img-top" alt="{{ curso.titulo }}">
+                {% else %}
+                <div class="course-image-placeholder">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-{{ 'success' if curso.nivel == 'Iniciante' else 'primary' if curso.nivel == 'Intermediário' else 'danger' }}">
+                            {{ curso.nivel }}
+                        </span>
+                        <div class="text-warning">
+                            {% for i in range(5) %}
+                                {% if i < curso.avaliacao %}
+                                    <i class="fas fa-star"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                            <small class="text-muted">({{ curso.total_avaliacoes }})</small>
+                        </div>
+                    </div>
+                    <h5 class="card-title">{{ curso.titulo }}</h5>
+                    <p class="card-text text-muted flex-grow-1">{{ curso.descricao|truncate(150) }}</p>
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user-graduate me-2 text-primary"></i>
+                                <small class="text-muted">{{ curso.total_alunos }} alunos</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-clock me-2 text-primary"></i>
+                                <small class="text-muted">{{ curso.duracao }} horas</small>
+                            </div>
+                        </div>
+                        <div class="progress mb-3" style="height: 6px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ curso.conclusao }}%" 
+                                 aria-valuenow="{{ curso.conclusao }}" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            {% if curso.preco == 0 %}
+                                <span class="h5 mb-0 text-success">Grátis</span>
+                            {% else %}
+                                <span class="h5 mb-0">R$ {{ "%.2f"|format(curso.preco) }}</span>
+                            {% endif %}
+                            <a href="{{ url_for('curso_detalhes', id_curso=curso.id) }}" class="btn btn-outline-primary">
+                                {{ 'Continuar' if curso.conclusao > 0 else 'Começar' }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-book-open fa-3x text-muted mb-3"></i>
+                <h3>Nenhum curso encontrado</h3>
+                <p class="text-muted">Não encontramos cursos que correspondam à sua busca.</p>
+                <a href="{{ url_for('cursos') }}" class="btn btn-primary mt-3">Ver todos os cursos</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% if cursos %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <nav aria-label="Navegação de páginas">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Próxima</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <div class="p-4 bg-light rounded-3">
+                <h2 class="mb-4">Não encontrou o que procura?</h2>
+                <p class="lead mb-4">Temos uma equipe de especialistas prontos para criar o curso ideal para suas necessidades.</p>
+                <a href="{{ url_for('contato') }}" class="btn btn-primary btn-lg">Solicitar um curso personalizado</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Filtragem de cursos
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchCourse');
+        const filterLinks = document.querySelectorAll('[data-filter]');
+        const sortLinks = document.querySelectorAll('[data-sort]');
+        const courseItems = document.querySelectorAll('.col-lg-4.col-md-6');
+        
+        // Função para filtrar cursos
+        function filterCourses() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeFilter = document.querySelector('[data-filter].active');
+            const filterValue = activeFilter ? activeFilter.getAttribute('data-filter') : 'all';
+            
+            courseItems.forEach(item => {
+                const courseName = item.getAttribute('data-name');
+                const courseLevel = item.getAttribute('data-level');
+                const matchesSearch = courseName.includes(searchTerm);
+                const matchesFilter = filterValue === 'all' || courseLevel === filterValue;
+                
+                if (matchesSearch && matchesFilter) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Verifica se há cursos visíveis
+            const visibleCourses = document.querySelectorAll('.col-lg-4.col-md-6[style="display: block"]');
+            const noResults = document.querySelector('.no-results');
+            
+            if (visibleCourses.length === 0 && !noResults) {
+                const container = document.getElementById('coursesContainer');
+                container.innerHTML = `
+                    <div class="col-12 no-results">
+                        <div class="text-center py-5">
+                            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                            <h3>Nenhum curso encontrado</h3>
+                            <p class="text-muted">Não encontramos cursos que correspondam à sua busca.</p>
+                            <button class="btn btn-primary mt-3" onclick="window.location.href='{{ url_for('cursos') }}'">
+                                Limpar filtros
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else if (visibleCourses.length > 0 && noResults) {
+                noResults.remove();
+            }
+        }
+        
+        // Função para ordenar cursos
+        function sortCourses(sortBy) {
+            const container = document.getElementById('coursesContainer');
+            const items = Array.from(container.children);
+            
+            items.sort((a, b) => {
+                switch(sortBy) {
+                    case 'name':
+                        return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+                    case 'recent':
+                        return parseInt(b.getAttribute('data-date')) - parseInt(a.getAttribute('data-date'));
+                    case 'popular':
+                        return parseInt(b.getAttribute('data-students')) - parseInt(a.getAttribute('data-students'));
+                    case 'rating':
+                        return parseFloat(b.getAttribute('data-rating')) - parseFloat(a.getAttribute('data-rating'));
+                    default:
+                        return 0;
+                }
+            });
+            
+            // Remove os itens atuais
+            items.forEach(item => container.removeChild(item));
+            
+            // Adiciona os itens ordenados
+            items.forEach(item => container.appendChild(item));
+        }
+        
+        // Event listeners
+        searchInput.addEventListener('input', filterCourses);
+        
+        filterLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                filterLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                filterCourses();
+            });
+        });
+        
+        sortLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                sortLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                sortCourses(this.getAttribute('data-sort'));
+            });
+        });
+        
+        // Inicializa a filtragem
+        filterCourses();
+    });
+</script>
+{% endblock %}

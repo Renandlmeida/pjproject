@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Cursos de Python - Aprenda Python do Básico ao Avançado{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Cabeçalho -->
+    <div class="row mb-5 text-center">
+        <div class="col-12">
+            <div class="animate__animated animate__fadeInDown">
+                <i class="fab fa-python text-primary display-1 mb-3"></i>
+                <h1 class="display-4 fw-bold">Python</h1>
+                <p class="lead">A linguagem mais versátil do mercado</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cursos em Destaque -->
+    <div class="row g-4">
+        <!-- Curso 1 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                <img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?ixlib=rb-4.0.3&auto=format&fit=crop&w=1631&q=80" class="card-img-top" alt="Python Básico" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge bg-success mb-2">Iniciante</span>
+                    <h5 class="card-title">Python para Iniciantes</h5>
+                    <p class="card-text">Aprenda Python do zero de forma prática e objetiva.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Fundamentos da linguagem</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Estruturas de dados</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Orientação a Objetos</li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a href="#" class="btn btn-primary w-100">Começar Agora</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Curso 2 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                <img src="https://images.unsplash.com/photo-1546410531-bb4caa6f4245?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80" class="card-img-top" alt="Python Web" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge bg-warning text-dark mb-2">Intermediário</span>
+                    <h5 class="card-title">Desenvolvimento Web com Python</h5>
+                    <p class="card-text">Crie aplicações web com Django e Flask.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Django Framework</li>
+                        <li><i class="fas fa-check text-success me-2"></i>APIs RESTful</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Autenticação e Autorização</li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a href="#" class="btn btn-primary w-100">Começar Agora</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Destaque -->
+        <div class="col-md-12 col-lg-4">
+            <div class="card h-100 border-0 bg-light animate__animated animate__fadeInRight" style="animation-delay: 0.6s">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <h3 class="h4 mb-4">Por que aprender Python?</h3>
+                    <div class="d-flex mb-3">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-laptop-code fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5 class="h6 mb-1">Versatilidade</h5>
+                            <p class="small text-muted mb-0">Web, dados, automação, IA e muito mais</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-graduation-cap fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5 class="h6 mb-1">Fácil Aprendizado</h5>
+                            <p class="small text-muted mb-0">Sintaxe simples e legível</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-briefcase fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5 class="h6 mb-1">Mercado de Trabalho</h5>
+                            <p class="small text-muted mb-0">Uma das linguagens mais requisitadas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const animateOnScroll = function() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (elementPosition < screenPosition) {
+                    element.classList.add('animate__animated', 'animate__fadeInUp');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        animateOnScroll();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <h1 class="mt-4">{{ title }}</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('admin_perguntas') }}">Perguntas</a></li>
+        <li class="breadcrumb-item active">{{ title.split()|first }}</li>
+    </ol>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-{{ 'edit' if 'Editar' in title else 'plus' }} me-1"></i>
+            {{ title }}
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <div class="form-floating mb-3">
+                            {{ form.question_text(class="form-control" + (' is-invalid' if form.question_text.errors else '')) }}
+                            {{ form.question_text.label }}
+                            {% for error in form.question_text.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <div class="form-floating mb-3">
+                            {{ form.question_type(class="form-select" + (' is-invalid' if form.question_type.errors else '')) }}
+                            {{ form.question_type.label }}
+                            {% for error in form.question_type.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <div class="form-floating">
+                            {{ form.order(class="form-control" + (' is-invalid' if form.order.errors else '')) }}
+                            {{ form.order.label }}
+                            {% for error in form.order.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            {{ form.lesson_id(class="form-select" + (' is-invalid' if form.lesson_id.errors else '')) }}
+                            {{ form.lesson_id.label }}
+                            {% for error in form.lesson_id.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6" id="correctAnswerContainer">
+                        <div class="form-floating">
+                            {{ form.correct_answer(class="form-control" + (' is-invalid' if form.correct_answer.errors else '')) }}
+                            {{ form.correct_answer.label }}
+                            {% for error in form.correct_answer.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3" id="optionsContainer">
+                    <div class="form-floating">
+                        {{ form.options(class="form-control" + (' is-invalid' if form.options.errors else ''), 
+                                      style="height: 150px", 
+                                      placeholder="Digite cada opção em uma linha. Use * para marcar a resposta correta.") }}
+                        {{ form.options.label }}
+                        <div class="form-text">
+                            Digite cada opção em uma linha. Use * para marcar a resposta correta.
+                        </div>
+                        {% for error in form.options.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="form-floating">
+                        {{ form.explanation(class="form-control" + (' is-invalid' if form.explanation.errors else ''), 
+                                          style="height: 100px") }}
+                        {{ form.explanation.label }}
+                        <div class="form-text">
+                            Explicação detalhada da resposta correta (opcional).
+                        </div>
+                        {% for error in form.explanation.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('admin_perguntas') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Mostrar/ocultar campos com base no tipo de pergunta
+function toggleQuestionFields() {
+    const questionType = document.getElementById('{{ form.question_type.id }}').value;
+    const optionsContainer = document.getElementById('optionsContainer');
+    const correctAnswerContainer = document.getElementById('correctAnswerContainer');
+    
+    if (questionType === 'multiple_choice') {
+        optionsContainer.style.display = 'block';
+        correctAnswerContainer.style.display = 'none';
+    } else {
+        optionsContainer.style.display = 'none';
+        correctAnswerContainer.style.display = 'block';
+    }
+}
+
+// Inicializar campos ao carregar a página
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar visibilidade dos campos
+    toggleQuestionFields();
+    
+    // Adicionar evento de mudança no tipo de pergunta
+    document.getElementById('{{ form.question_type.id }}').addEventListener('change', toggleQuestionFields);
+    
+    // Inicializar o CKEditor para campos de texto longo
+    if (typeof ClassicEditor !== 'undefined') {
+        ClassicEditor
+            .create(document.querySelector('#{{ form.question_text.id }}'))
+            .catch(error => {
+                console.error('Error initializing CKEditor:', error);
+            });
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Contato - TechServices{% endblock %}
+
+{% block content %}
+<h1>Entre em Contato</h1>
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Informações de Contato</h3>
+                <p><strong>Email:</strong> contato@techservices.com.br</p>
+                <p><strong>Telefone:</strong> (11) 5555-1234</p>
+                <p><strong>Endereço:</strong> Av. Paulista, 1000 - São Paulo, SP</p>
+                <p><strong>Horário de Atendimento:</strong> Segunda a Sexta, das 9h às 18h</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Envie uma Mensagem</h3>
+                <form>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Assunto</label>
+                        <input type="text" class="form-control" id="subject" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Mensagem</label>
+                        <textarea class="form-control" id="message" rows="4" required></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
