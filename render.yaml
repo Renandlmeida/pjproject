@@ -1,12 +1,14 @@
 services:
   - type: web
-    name: akoni-software-house
+    name: akonisftwr
     env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn app:app"
+    region: ohio  # ou outra região mais próxima de você
+    buildCommand: |
+      pip install -r requirements.txt
+    startCommand: gunicorn wsgi:application --name akonisftwr --workers 4 --bind 0.0.0.0:$PORT --timeout 120
     envVars:
       - key: PYTHON_VERSION
-        value: 3.9.0
+        value: 3.9.16
       - key: FLASK_APP
         value: app.py
       - key: FLASK_ENV
@@ -18,8 +20,20 @@ services:
           name: akoni-db
           property: connectionString
 
+    # Configurações de plano (ajuste conforme necessário)
+    plan: free
+    numInstances: 1
+    autoDeploy: true
+
+    # Health check path (rota que retorna 200 se a aplicação estiver saudável)
+    healthCheckPath: /
+
+    # Timeout para health check (em segundos)
+    healthCheckTimeout: 15
+
+# Banco de dados PostgreSQL
 databases:
   - name: akoni-db
     databaseName: akoni
     user: akoni_user
-    plan: free
+    plan: free  # Plano gratuito para começar
