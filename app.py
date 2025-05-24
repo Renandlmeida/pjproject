@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
@@ -6,15 +8,31 @@ from wtforms.validators import DataRequired, Email, Length, ValidationError
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
-import os
 import json
 from datetime import datetime, timedelta
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev_key_for_testing')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
+
+def create_app():
+    app = Flask(__name__)
+    
+    # Configurações básicas
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev_key_for_testing')
+    
+    # Configuração do banco de dados
+    database_url = os.environ.get('DATABASE_URL')
+    if database_url and database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url or 'sqlite:///site.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
+    
+    return app
+
+# Cria a aplicação
+app = create_app()
 
 db = SQLAlchemy(app)
 login_manager = LoginManager()
@@ -625,4 +643,5 @@ print("Olá, Mundo!")  # Esta linha imprime uma mensagem
     db.session.commit()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=(os.environ.get('FLASK_ENV') == 'development'))
